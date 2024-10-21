@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  react-app:
+    build:
+      context: ./react-frontend
+    ports:
+      - "3000:80"
+
+  flask-app:
+    build:
+      context: ./FlaskApp
+    ports:
+      - "5000:5000"
