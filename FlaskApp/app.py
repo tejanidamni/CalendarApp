@@ -157,11 +157,20 @@ def login():
     email = data.get('email')
     password = data.get('password')
     user = User.query.filter_by(email=email).first()
-    if user and bcrypt.check_password_hash(user.password, password):
-        access_token = create_access_token(identity={'email': email})
-        return jsonify({'access_token': access_token}), 200
+    if user:
+        if user.password:
+            if bcrypt.check_password_hash(user.password, password):
+                access_token = create_access_token(identity={'email': email})
+                return jsonify({'access_token': access_token}), 200
+            else:
+                return jsonify({'message': 'Invalid email or password'}), 401
+        else:
+            return jsonify({'message': 'Please register or login through Google'}), 401
     else:
-        return jsonify({'message': 'Invalid email or password'}), 401
+        return jsonify({'message': 'Please register or login through Google'}), 401
+
+
+    1
 
 @app.route('/google-login', methods=['POST'])
 def google_login():
